@@ -44,7 +44,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
         }
 
 
-        const threadMessages = await openai.beta.threads.messages.list(
+        const messages = await openai.beta.threads.messages.list(
             `${threadId}`
         );
 
@@ -54,8 +54,8 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             )
             .pop();
 
-            console.log(threadMessages);
-            console.log(lastMessageForRun);
+        console.log(messages);
+        console.log(lastMessageForRun);
 
         await ack();
 
@@ -63,6 +63,9 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             response_type: 'in_channel',
             text: '🤖연말정산봇의 답변',
             blocks: [
+                {
+                    "type": "divider"
+                },
                 {
                     "type": "section",
                     "text": {

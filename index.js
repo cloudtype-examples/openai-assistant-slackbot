@@ -33,11 +33,29 @@ app.command('/연말정산', async ({ command, ack, say }) => {
         console.log(runId);
         console.log(threadId);
 
+        let runStatus = await openai.beta.threads.runs.retrieve(
+            threadId,
+            runId
+        );
+
+        while (runStatus.status !== "completed") {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
+        }
+
+
         const threadMessages = await openai.beta.threads.messages.list(
             `${threadId}`
         );
 
-        console.log(threadMessages);
+        const lastMessageForRun = messages.data
+            .filter(
+                (message) => message.run_id === runId && message.role === "assistant"
+            )
+            .pop();
+
+            console.log(threadMessages);
+            console.log(lastMessageForRun);
 
         await ack();
 
@@ -69,7 +87,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `🔶 *답변*\n${responseMessage}`
+                        "text": `🔶 *답변*\n${lastMessageForRun.content[0].text.value}`
                     }
                 },
                 {
@@ -96,7 +114,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             ],
         });
     } catch (error) {
-        console.error(`Error fetching data from API: ${err.message}`, error);
+        console.error(`Error fetching data from API: ${error.message}`, error);
         await say('Failed to fetch data from the API');
     }
 });

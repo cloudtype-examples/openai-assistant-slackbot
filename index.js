@@ -96,7 +96,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             ],
         });
     } catch (error) {
-        console.error('Error fetching data from API:', error);
+        console.error(`Error fetching data from API: ${err.message}`, error);
         await say('Failed to fetch data from the API');
     }
 });

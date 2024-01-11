@@ -48,7 +48,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             `${threadId}`
         );
 
-        const lastMessageForRun = messages
+        const lastMessageForRun = messages.data
             .filter(
                 (message) => message.run_id === runId && message.role === "assistant"
             )

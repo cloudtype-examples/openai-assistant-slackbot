@@ -14,12 +14,10 @@ const app = new App({
 });
 
 app.command('/연말정산', async ({ command, ack, say }) => {
-    await ack();
 
     const userQuestion = command.text;
 
     try {
-
         const run = await openai.beta.threads.createAndRun({
             assistant_id: `${process.env.ASSISTANT_ID}`,
             thread: {
@@ -29,12 +27,17 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             },
         });
 
+        console.log(run);
+        console.log(typeof run);
+
         const apiResponse = await run.json();
 
         const runId = apiResponse.data[0].run_id;
         console.log(runId);
 
         const responseMessage = apiResponse.data[0].content[0].text.value;
+
+        await ack();
 
         await say({
             response_type: 'in_channel',

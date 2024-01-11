@@ -34,20 +34,15 @@ app.command('/연말정산', async ({ command, ack, say }) => {
         console.log(runId);
         console.log(threadId);
 
-        let runStatus = await openai.beta.threads.runs.retrieve(
-            threadId,
-            runId
-        );
+        let runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
 
         while (runStatus.status !== "completed") {
-            await new Promise((resolve) => setTimeout(resolve, 20000));
+            await new Promise((resolve) => setTimeout(resolve, 5000));
             runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
+            console.log(runStatus);
         }
 
-
-        const messages = await openai.beta.threads.messages.list(
-            `${threadId}`
-        );
+        const messages = await openai.beta.threads.messages.list(`${threadId}`);
 
         const lastMessageForRun = messages.data
             .filter(

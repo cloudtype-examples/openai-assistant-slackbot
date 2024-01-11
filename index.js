@@ -48,7 +48,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             `${threadId}`
         );
 
-        const lastMessageForRun = messages.data
+        const lastMessageForRun = messages
             .filter(
                 (message) => message.run_id === runId && message.role === "assistant"
             )
@@ -90,7 +90,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `🔶 *답변*\n${lastMessageForRun.content[0].text.value}`
+                        "text": `🔶 *답변*\n${lastMessageForRun.text.value}`
                     }
                 },
                 {

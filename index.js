@@ -13,6 +13,10 @@ const app = new App({
     socketMode: true,
 });
 
+const sleep = (ms) => {
+    return new Promise((r) => setTimeout(r, ms));
+}
+
 app.command('/연말정산', async ({ command, ack, say }) => {
     await ack();
 
@@ -37,10 +41,12 @@ app.command('/연말정산', async ({ command, ack, say }) => {
         let runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
 
         while (runStatus.status !== "completed") {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             runStatus = await openai.beta.threads.runs.retrieve(threadId, runId);
             console.log(runStatus);
         }
+
+        sleep(10000).then(() => console.log("The language model is generating a response."));
 
         const messages = await openai.beta.threads.messages.list(`${threadId}`);
 

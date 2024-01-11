@@ -46,7 +46,7 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             console.log(runStatus);
         }
 
-        sleep(10000).then(() => console.log("The language model is generating a response."));
+        await sleep(5000).then(() => console.log("The language model is generating a response."));
 
         const messages = await openai.beta.threads.messages.list(`${threadId}`);
 

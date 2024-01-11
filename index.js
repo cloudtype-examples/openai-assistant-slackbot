@@ -14,6 +14,7 @@ const app = new App({
 });
 
 app.command('/연말정산', async ({ command, ack, say }) => {
+    await ack();
 
     const userQuestion = command.text;
 
@@ -57,7 +58,6 @@ app.command('/연말정산', async ({ command, ack, say }) => {
         console.log(messages);
         console.log(lastMessageForRun);
 
-        await ack();
 
         await say({
             response_type: 'in_channel',

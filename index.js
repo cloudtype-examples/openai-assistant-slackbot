@@ -27,15 +27,17 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             },
         });
 
-        console.log(run);
-        console.log(typeof run);
+        const runId = run.data[0].id;
+        const threadId = run.data[0].thread_id;
 
-        const apiResponse = await run.json();
-
-        const runId = apiResponse.data[0].run_id;
         console.log(runId);
+        console.log(threadId);
 
-        const responseMessage = apiResponse.data[0].content[0].text.value;
+        const threadMessages = await openai.beta.threads.messages.list(
+            `${threadId}`
+        );
+
+        console.log(threadMessages);
 
         await ack();
 

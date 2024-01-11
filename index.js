@@ -27,8 +27,8 @@ app.command('/연말정산', async ({ command, ack, say }) => {
             },
         });
 
-        const runId = run.data[0].id;
-        const threadId = run.data[0].thread_id;
+        const runId = run.id;
+        const threadId = run.thread_id;
 
         console.log(runId);
         console.log(threadId);

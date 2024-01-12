@@ -1,5 +1,5 @@
-const { App, LogLevel } = require('@slack/bolt');
-const { OpenAI } = require('openai');
+const { App, LogLevel } = require("@slack/bolt");
+const { OpenAI } = require("openai");
 
 const env = process.env || {};
 const BOT_TOKEN = env.BOT_TOKEN;
@@ -7,163 +7,193 @@ const SIGNING_SECRET = env.SIGNING_SECRET;
 const APP_TOKEN = env.APP_TOKEN;
 const API_ENDPOINT = env.API_ENDPOINT;
 const SLASH_COMMAND = env.SLASH_COMMAND;
-
 const OPENAI_API_KEY = env.OPENAI_API_KEY;
 const ASSISTANT_ID = env.ASSISTANT_ID;
-
-if (!BOT_TOKEN) {
-  console.log('A bot token is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-if (!SIGNING_SECRET) {
-  console.log('A signing secret is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-if (!APP_TOKEN) {
-  console.log('An app token is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-if (!API_ENDPOINT) {
-  console.log('An api endpoint is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-if (!SLASH_COMMAND) {
-  console.log('A slash command is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-if (!OPENAI_API_KEY) {
-  console.log('An openai api key is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-if (!ASSISTANT_ID) {
-  console.log('An assistant id is empty.');
-  sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-}
-
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY
-});
-
-const app = new App({
-  token: BOT_TOKEN,
-  signingSecret: SIGNING_SECRET,
-  appToken: APP_TOKEN,
-  logLevel: LogLevel.DEBUG,
-  socketMode: true
-});
-
-const slackBotStart = async () => {
-  try {
-    await app.start();
-    console.log('⚡️ Bolt app is running!');
-  } catch (error) {
-    console.error('Error occurred:', error);
-    sleep(60 * 1000).then(() => console.log('Service is getting stopped automatically'));
-  }
-};
 
 const sleep = (ms) => {
   return new Promise((r) => setTimeout(r, ms));
 };
 
-app.command(`/${SLASH_COMMAND}`, async ({ command, ack, say }) => {
-  await ack();
+(async () => {
+  if (!BOT_TOKEN) {
+    console.log(
+      `Environment variable 'BOT_TOKEN' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
-  const userQuestion = command.text;
+  if (!SIGNING_SECRET) {
+    console.log(
+      `Environment variable 'SIGNING_SECRET' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
-  try {
-    const run = await openai.beta.threads.createAndRun({
-      assistant_id: ASSISTANT_ID,
-      thread: {
-        messages: [{ role: 'user', content: userQuestion }]
-      }
-    });
+  if (!APP_TOKEN) {
+    console.log(
+      `Environment variable 'APP_TOKEN' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
+  if (!API_ENDPOINT) {
+    console.log(
+      `Environment variable 'API_ENDPOINT' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
-    let runStatus = await openai.beta.threads.runs.retrieve(run.thread_id, run.id);
+  if (!SLASH_COMMAND) {
+    console.log(
+      `Environment variable 'SLASH_COMMAND' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
-    while (runStatus.status !== 'completed') {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      runStatus = await openai.beta.threads.runs.retrieve(run.thread_id, run.id);
-      console.log(runStatus);
-    }
+  if (!OPENAI_API_KEY) {
+    console.log(
+      `Environment variable 'OPENAI_API_KEY' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
-    await sleep(5000).then(() => console.log('The language model is generating a response.'));
+  if (!ASSISTANT_ID) {
+    console.log(
+      `Environment variable 'ASSISTANT_ID' is required. Service will be stopped automatically in 60s`
+    );
+    await sleep(60 * 1000);
+  }
 
-    const messages = await openai.beta.threads.messages.list(run.thread_id);
+  const openai = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+  });
 
-    const lastMessageForRun = messages.data.filter((message) => message.run_id === run.id && message.role === 'assistant').pop();
+  const app = new App({
+    token: BOT_TOKEN,
+    signingSecret: SIGNING_SECRET,
+    appToken: APP_TOKEN,
+    logLevel: LogLevel.DEBUG,
+    socketMode: true,
+  });
 
-    console.log(messages);
-    console.log(lastMessageForRun);
+  app.command(`/${SLASH_COMMAND}`, async ({ command, ack, say }) => {
+    await ack();
 
-    await say({
-      response_type: 'in_channel',
-      text: '🤖연말정산봇의 답변',
-      blocks: [
-        {
-          type: 'divider'
+    const userQuestion = command.text;
+
+    try {
+      const run = await openai.beta.threads.createAndRun({
+        assistant_id: ASSISTANT_ID,
+        thread: {
+          messages: [{ role: "user", content: userQuestion }],
         },
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: '💵 *2023년 귀속 연말정산* 💵'
-          }
-        },
-        {
-          type: 'divider'
-        },
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `🔷 *질문*\n${userQuestion}`
-          }
-        },
-        {
-          type: 'divider'
-        },
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `🔶 *답변*\n${lastMessageForRun.content[0].text.value}`
-          }
-        },
-        {
-          type: 'divider'
-        },
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: '상세한 내용은 안내책자 참고'
-          },
-          accessory: {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: '연말정산 안내 PDF 다운로드',
-              emoji: true
-            },
-            value: 'click_me_123',
-            url: 'https://www.nts.go.kr/comm/nttFileDownload.do?fileKey=143949cdeade82ab901580cd2f2a68ae',
-            action_id: 'button-action'
+      });
+
+      let runStatus = await openai.beta.threads.runs.retrieve(
+        run.thread_id,
+        run.id
+      );
+
+      let response = null;
+
+      for (let i = 0; i < 400; i++) {
+        runStatus = await openai.beta.threads.runs.retrieve(
+          run.thread_id,
+          run.id
+        );
+
+        if (runStatus.status === "completed") {
+          const messages = await openai.beta.threads.messages.list(
+            run.thread_id
+          );
+
+          response = messages.data.find(
+            (message) =>
+              message.run_id === run.id && message.role === "assistant"
+          );
+
+          if (response?.content?.length > 0 && response.content[0].text.value) {
+            break;
           }
         }
-      ]
-    });
-  } catch (error) {
-    console.error(`Error fetching data from API: ${error.message}`, error);
-    await say('Failed to fetch data from the API');
-  }
-});
 
-slackBotStart();
+        await sleep(300);
+      }
+
+
+      await say({
+        response_type: "in_channel",
+        text: "🤖연말정산봇의 답변",
+        blocks: [
+          {
+            type: "divider",
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "💵 *2023년 귀속 연말정산* 💵",
+            },
+          },
+          {
+            type: "divider",
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `🔷 *질문*\n${userQuestion}`,
+            },
+          },
+          {
+            type: "divider",
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `🔶 *답변*\n${
+                response
+                  ? response.content[0].text.value
+                  : `답변을 가져올 수 없습니다.`
+              }`,
+            },
+          },
+          {
+            type: "divider",
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "상세한 내용은 안내책자 참고",
+            },
+            accessory: {
+              type: "button",
+              text: {
+                type: "plain_text",
+                text: "연말정산 안내 PDF 다운로드",
+                emoji: true,
+              },
+              value: "click_me_123",
+              url: "https://www.nts.go.kr/comm/nttFileDownload.do?fileKey=143949cdeade82ab901580cd2f2a68ae",
+              action_id: "button-action",
+            },
+          },
+        ],
+      });
+    } catch (error) {
+      console.error(`Error fetching data from API: ${error.message}`, error);
+      await say(`오류: ${error.message}`);
+    }
+  });
+
+  try {
+    await app.start();
+    console.log("⚡️ Bot is running!");
+  } catch (error) {
+    console.log(`Error occurred: ${err.message}`);
+    console.error(error);
+    await sleep(60 * 1000);
+  }
+})();

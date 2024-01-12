@@ -95,6 +95,7 @@ const sleep = (ms) => {
         run.id
       );
 
+      let request = null;
       let response = null;
 
       for (let i = 0; i < 400; i++) {

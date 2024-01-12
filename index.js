@@ -145,15 +145,15 @@ const sleep = (ms) => {
               text: '💵 2023년 귀속 연말정산 💵'
             }
           }, 
-          {
-            "type": "context",
-            "elements": [
-              {
-                type: 'plain_text',
-                text: `@${apiResponse.user}`
-              }
-            ]
-          },        
+          // {
+          //   "type": "context",
+          //   "elements": [
+          //     {
+          //       type: 'plain_text',
+          //       text: `@${apiResponse.user}`
+          //     }
+          //   ]
+          // },        
           {
             type: 'divider'
           },

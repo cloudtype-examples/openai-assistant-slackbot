@@ -108,10 +108,10 @@ const sleep = (ms) => {
             run.thread_id
           );
 
-          request = messages.data.find(
-            (message) =>
-              message.run_id === run.id && message.role === "user"
-          );
+          // request = messages.data.find(
+          //   (message) =>
+          //     message.run_id === run.id && message.role === "user"
+          // );
 
           response = messages.data.find(
             (message) =>
@@ -123,7 +123,7 @@ const sleep = (ms) => {
           }
         }
 
-        console.log(request);
+        // console.log(request);
         console.log(response);
 
         await sleep(300);

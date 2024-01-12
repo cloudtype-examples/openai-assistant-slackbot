@@ -80,6 +80,7 @@ const sleep = (ms) => {
   app.command(`/${SLASH_COMMAND}`, async ({ command, ack, say }) => {
     await ack();
 
+    const user = command.user_id;
     const userQuestion = command.text;
 
     try {
@@ -95,7 +96,6 @@ const sleep = (ms) => {
         run.id
       );
 
-      let request = null;
       let response = null;
 
       for (let i = 0; i < 400; i++) {
@@ -109,11 +109,6 @@ const sleep = (ms) => {
             run.thread_id
           );
 
-          request = messages.data.find(
-            (message) =>
-              message.run_id === run.id && message.role === "user"
-          );
-
           response = messages.data.find(
             (message) =>
               message.run_id === run.id && message.role === "assistant"
@@ -123,9 +118,6 @@ const sleep = (ms) => {
             break;
           }
         }
-
-        console.log(request);
-        console.log(response);
 
         await sleep(300);
       }
@@ -145,15 +137,15 @@ const sleep = (ms) => {
               text: '💵 2023년 귀속 연말정산 💵'
             }
           }, 
-          // {
-          //   "type": "context",
-          //   "elements": [
-          //     {
-          //       type: 'plain_text',
-          //       text: `@${apiResponse.user}`
-          //     }
-          //   ]
-          // },        
+          {
+            "type": "context",
+            "elements": [
+              {
+                type: 'plain_text',
+                text: `@${user}`
+              }
+            ]
+          },        
           {
             type: 'divider'
           },

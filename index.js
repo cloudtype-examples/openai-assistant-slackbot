@@ -130,11 +130,11 @@ const sleep = (ms) => {
             type: "divider",
           },
           {
-            type: "section",
+            type: 'header',
             text: {
-              type: "mrkdwn",
-              text: "💵 *2023년 귀속 연말정산* 💵",
-            },
+              type: 'plain_text',
+              text: '💵 *2023년 귀속 연말정산* 💵'
+            }
           },
           {
             type: "divider",

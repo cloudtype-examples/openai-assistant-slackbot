@@ -5,7 +5,6 @@ const env = process.env || {};
 const BOT_TOKEN = env.BOT_TOKEN;
 const SIGNING_SECRET = env.SIGNING_SECRET;
 const APP_TOKEN = env.APP_TOKEN;
-const API_ENDPOINT = env.API_ENDPOINT;
 const SLASH_COMMAND = env.SLASH_COMMAND;
 const OPENAI_API_KEY = env.OPENAI_API_KEY;
 const ASSISTANT_ID = env.ASSISTANT_ID;
@@ -32,13 +31,6 @@ const sleep = (ms) => {
   if (!APP_TOKEN) {
     console.log(
       `Environment variable 'APP_TOKEN' is required. Service will be stopped automatically in 60s`
-    );
-    await sleep(60 * 1000);
-  }
-
-  if (!API_ENDPOINT) {
-    console.log(
-      `Environment variable 'API_ENDPOINT' is required. Service will be stopped automatically in 60s`
     );
     await sleep(60 * 1000);
   }

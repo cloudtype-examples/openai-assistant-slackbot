@@ -80,7 +80,7 @@ const sleep = (ms) => {
   app.command(`/${SLASH_COMMAND}`, async ({ command, ack, say }) => {
     await ack();
 
-    const user = command.user_id;
+    const user = command.user_name;
     const userQuestion = command.text;
 
     try {

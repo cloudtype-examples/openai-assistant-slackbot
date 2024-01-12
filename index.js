@@ -118,6 +118,8 @@ const sleep = (ms) => {
           }
         }
 
+        console.log(response);
+
         await sleep(300);
       }
 
@@ -127,7 +129,7 @@ const sleep = (ms) => {
         text: "🤖연말정산봇의 답변",
         blocks: [
           {
-            type: "divider",
+            type: 'divider'
           },
           {
             type: 'header',
@@ -135,9 +137,9 @@ const sleep = (ms) => {
               type: 'plain_text',
               text: '💵 *2023년 귀속 연말정산* 💵'
             }
-          },
+          },         
           {
-            type: "divider",
+            type: 'divider'
           },
           {
             type: "section",

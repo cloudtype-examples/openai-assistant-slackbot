@@ -1,4 +1,4 @@
-const { App, LogLevel } = require("@slack/bolt");
+const { App, LogLevel, HTTPReceiver } = require("@slack/bolt");
 const { OpenAI } = require("openai");
 
 const env = process.env || {};
@@ -74,6 +74,15 @@ const sleep = (ms) => {
     appToken: APP_TOKEN,
     logLevel: LogLevel.DEBUG,
     socketMode: true,
+    receiver: new HTTPReceiver({
+        signingSecret: SIGNING_SECRET,
+        unhandledRequestHandler: async ({ logger, response }) => {
+          logger.info('Acknowledging this incoming request because 10 seconds already passed...');
+          response.writeHead(200);
+          response.end();
+        },
+        unhandledRequestTimeoutMillis: 10000,
+      }),
   });
 
   app.command(`/${SLASH_COMMAND}`, async ({ command, ack, say }) => {

@@ -73,7 +73,7 @@ const sleep = (ms) => {
     signingSecret: SIGNING_SECRET,
     appToken: APP_TOKEN,
     logLevel: LogLevel.DEBUG,
-    socketMode: true,
+    port: 3000,
     receiver: new HTTPReceiver({
         signingSecret: SIGNING_SECRET,
         unhandledRequestHandler: async ({ logger, response }) => {

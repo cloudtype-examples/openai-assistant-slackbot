@@ -192,7 +192,7 @@ const sleep = (ms) => {
     await app.start();
     console.log("⚡️ Bot is running!");
   } catch (error) {
-    console.log(`Error occurred: ${err.message}`);
+    console.log(`Error occurred: ${error.message}`);
     console.error(error);
     await sleep(60 * 1000);
   }

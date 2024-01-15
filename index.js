@@ -8,6 +8,7 @@ const APP_TOKEN = env.APP_TOKEN;
 const SLASH_COMMAND = env.SLASH_COMMAND;
 const OPENAI_API_KEY = env.OPENAI_API_KEY;
 const ASSISTANT_ID = env.ASSISTANT_ID;
+const BOT_TITLE = env.BOT_TITLE
 
 const sleep = (ms) => {
   return new Promise((r) => setTimeout(r, ms));
@@ -125,7 +126,6 @@ const sleep = (ms) => {
 
       await say({
         response_type: "in_channel",
-        text: "🤖연말정산봇의 답변",
         blocks: [
           {
             type: 'divider'
@@ -134,7 +134,7 @@ const sleep = (ms) => {
             type: 'header',
             text: {
               type: 'plain_text',
-              text: '💵 2023년 귀속 연말정산 💵'
+              text: BOT_TITLE
             }
           }, 
           {
@@ -168,27 +168,6 @@ const sleep = (ms) => {
                   ? response.content[0].text.value
                   : `답변을 가져올 수 없습니다.`
               }`,
-            },
-          },
-          {
-            type: "divider",
-          },
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "상세한 내용은 안내책자 참고",
-            },
-            accessory: {
-              type: "button",
-              text: {
-                type: "plain_text",
-                text: "연말정산 안내 PDF 다운로드",
-                emoji: true,
-              },
-              value: "click_me_123",
-              url: "https://www.nts.go.kr/comm/nttFileDownload.do?fileKey=143949cdeade82ab901580cd2f2a68ae",
-              action_id: "button-action",
             },
           },
         ],

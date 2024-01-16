@@ -8,7 +8,7 @@ const APP_TOKEN = env.APP_TOKEN;
 const SLASH_COMMAND = env.SLASH_COMMAND;
 const OPENAI_API_KEY = env.OPENAI_API_KEY;
 const ASSISTANT_ID = env.ASSISTANT_ID;
-const BOT_TITLE = env.BOT_TITLE
+const BOT_TITLE = env.BOT_TITLE || ''
 
 const sleep = (ms) => {
   return new Promise((r) => setTimeout(r, ms));

@@ -1,5 +1,5 @@
 {
-  "name": "ai-slackbot",
+  "name": "openai-assistant-slackbot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,6 @@
   "dependencies": {
     "@slack/bolt": "^3.17.0",
     "node-fetch": "^3.3.2",
-    "openai": "^4.24.3"
+    "openai": "^4.47.1"
   }
 }

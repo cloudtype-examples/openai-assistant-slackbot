@@ -70,11 +70,11 @@ const sleep = (ms) => {
     receiver: new HTTPReceiver({
         signingSecret: SIGNING_SECRET,
         unhandledRequestHandler: async ({ logger, response }) => {
-          logger.info('Acknowledging this incoming request because 10 seconds already passed...');
+          logger.info('Acknowledging this incoming request because 20 seconds already passed...');
           response.writeHead(200);
           response.end();
         },
-        unhandledRequestTimeoutMillis: 10000,
+        unhandledRequestTimeoutMillis: 20000,
       }),
   });
 
